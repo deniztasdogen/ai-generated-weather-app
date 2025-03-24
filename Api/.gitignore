@@ -1,0 +1,70 @@
+# ASP.NET Core build and output folders
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio / Visual Studio Code files
+.vs/
+.vscode/
+*.user
+*.userosscache
+*.suo
+*.userprefs
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*.publishsettings
+orleans.codegen.cs
+
+# .NET Core
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+
+# NuGet Packages
+*.nupkg
+*.snupkg
+**/packages/*
+!**/packages/build/
+*.nuget.props
+*.nuget.targets
+
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Local configuration files
+appsettings.Development.json
+appsettings.local.json
+appsettings.*.local.json
+
+# SQLite database files
+*.db
+*.db-shm
+*.db-wal
+
+# IDE directories
+.idea/
+
+# Temporary files
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db 

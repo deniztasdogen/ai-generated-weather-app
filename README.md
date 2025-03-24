@@ -1,5 +1,3 @@
-Here is the reformatted version of your text:
-
 **Backend Development (.NET)**
 
 1. Create a new [ASP.NET](http://asp.net/) Core Web API project.
