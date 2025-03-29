@@ -17,6 +17,12 @@ public class ApplicationDbContext : DbContext
     public DbSet<ForecastDay> ForecastDays { get; set; } = null!;
     public DbSet<ForecastHour> ForecastHours { get; set; } = null!;
     public DbSet<WeatherAlert> WeatherAlerts { get; set; } = null!;
+    public DbSet<User> Users { get; set; } = null!;
+    public DbSet<Role> Roles { get; set; } = null!;
+    public DbSet<Permission> Permissions { get; set; } = null!;
+    public DbSet<UserRole> UserRoles { get; set; } = null!;
+    public DbSet<RolePermission> RolePermissions { get; set; } = null!;
+    public DbSet<UserPreference> UserPreferences { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -82,6 +88,78 @@ public class ApplicationDbContext : DbContext
             entity.HasOne(e => e.Location)
                   .WithMany(l => l.WeatherAlerts)
                   .HasForeignKey(e => e.LocationId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure User entity
+        modelBuilder.Entity<User>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Username).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Email).IsRequired().HasMaxLength(100);
+            entity.Property(e => e.PasswordHash).IsRequired();
+            entity.Property(e => e.FirstName).HasMaxLength(50);
+            entity.Property(e => e.LastName).HasMaxLength(50);
+            entity.HasIndex(e => e.Username).IsUnique();
+            entity.HasIndex(e => e.Email).IsUnique();
+        });
+
+        // Configure Role entity
+        modelBuilder.Entity<Role>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Description).HasMaxLength(200);
+            entity.HasIndex(e => e.Name).IsUnique();
+        });
+
+        // Configure Permission entity
+        modelBuilder.Entity<Permission>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.Description).HasMaxLength(200);
+            entity.Property(e => e.Module).IsRequired().HasMaxLength(50);
+            entity.HasIndex(e => e.Name).IsUnique();
+        });
+
+        // Configure UserRole entity
+        modelBuilder.Entity<UserRole>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.UserRoles)
+                  .HasForeignKey(e => e.UserId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Role)
+                  .WithMany(r => r.UserRoles)
+                  .HasForeignKey(e => e.RoleId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure RolePermission entity
+        modelBuilder.Entity<RolePermission>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.HasOne(e => e.Role)
+                  .WithMany(r => r.RolePermissions)
+                  .HasForeignKey(e => e.RoleId)
+                  .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(e => e.Permission)
+                  .WithMany(p => p.RolePermissions)
+                  .HasForeignKey(e => e.PermissionId)
+                  .OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // Configure UserPreference entity
+        modelBuilder.Entity<UserPreference>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.PreferenceKey).IsRequired().HasMaxLength(50);
+            entity.Property(e => e.PreferenceValue).IsRequired().HasMaxLength(200);
+            entity.HasOne(e => e.User)
+                  .WithMany(u => u.Preferences)
+                  .HasForeignKey(e => e.UserId)
                   .OnDelete(DeleteBehavior.Cascade);
         });
     }
